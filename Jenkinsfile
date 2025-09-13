@@ -4,32 +4,31 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Bhavani2909/jenkinspythonapp.git', branch: 'main', credentialsId: 'J'
+                checkout scm
             }
         }
-
         stage('Build Docker Image') {
             steps {
-                script {
-                    dockerImage = docker.build("python-jenkins-app")
-                }
+                sh 'sudo docker build -t myflaskapp:latest .'
             }
         }
-
-        stage('Run Container') {
+        stage('Deploy Container') {
             steps {
-                script {
-                    sh 'docker run -d -p 5000:5000 --name python-app python-jenkins-app'
-                }
+                sh '''
+                    sudo docker stop myflaskapp || true
+                    sudo docker rm myflaskapp || true
+                    sudo docker run -d --name myflaskapp -p 80:5000 myflaskapp:latest
+                '''
             }
         }
     }
 
     post {
         always {
-            sh 'docker ps -a'
+            sh 'sudo docker ps -a'
         }
     }
 }
+
 
 
