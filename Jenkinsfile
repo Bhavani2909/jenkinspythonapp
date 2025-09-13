@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Bhavani2909/jenkinspythonapp.git', credentialsId: 'J'
+                git url: 'https://github.com/Bhavani2909/jenkinspythonapp.git', branch: 'main', credentialsId: 'J'
             }
         }
 
@@ -31,4 +31,5 @@ pipeline {
         }
     }
 }
+
 
